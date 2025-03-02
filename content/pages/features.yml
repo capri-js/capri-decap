@@ -1,0 +1,22 @@
+title: Features
+headline: Powerful Features
+intro: >
+  This starter template comes with everything you need to build modern, fast
+  websites. Here's what's included out of the box.
+sections:
+  - type: TextAndImage
+    headline: Built for Speed
+    content: >
+      This template is built with performance in mind. By leveraging Capri's
+      island architecture, we can ship zero JavaScript by default and only
+      hydrate components that need interactivity.
+
+
+      * Optimal Core Web Vitals
+
+      * Fast page loads
+
+      * Minimal JavaScript
+
+      * SEO friendly
+    image: /img/urban-red.jpg

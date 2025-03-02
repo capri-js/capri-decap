@@ -1,0 +1,80 @@
+title: Home
+headline: Build Fast Websites with Capri
+intro: >
+  A modern starter template for building partially hydrated websites with Capri
+  and Decap CMS. Get the best of both worlds - static content and interactive
+  components.
+sections:
+  - type: FeatureGrid
+    headline: Key Features
+    features:
+      - headline: Partial Hydration!
+        text: Ship zero JavaScript by default, hydrate only what's needed
+        icon: material-symbols-light:bolt-outline-rounded
+      - headline: Content Management
+        text: Easy-to-use CMS with Git-based workflow
+        icon: material-symbols-light:content-copy-outline-rounded
+      - headline: Performance First
+        text: Lightning-fast page loads and optimal Core Web Vitals
+        icon: material-symbols-light:speed-outline-rounded
+      - headline: Developer Experience
+        text: TypeScript support, hot reloading, and great DX
+        icon: material-symbols-light:code-blocks-outline-rounded
+      - headline: SEO Friendly
+        text: Perfect lighthouse scores and semantic HTML
+        icon: material-symbols-light:person-search-outline-rounded
+      - headline: Customizable
+        text: Easy to extend with your own components
+        icon: material-symbols-light:settings-outline-rounded
+  - type: TextAndImage
+    headline: Modern Web Development
+    content: >
+      Build websites that are both **fast and interactive**. Capri's island
+      architecture lets you ship static content by default and add interactivity
+      only where needed.
+
+
+      * Zero JavaScript by default
+
+      * Hydrate components selectively
+
+      * TypeScript support
+
+      * Great developer experience
+    image: /img/lemon-yellow.jpg
+  - type: FactsAndFigures
+    headline: Why Choose This Stack?
+    facts:
+      - headline: Faster Page Loads
+        prefix: ""
+        number: 100
+        unit: ""
+        label: Lighthouse Score
+      - headline: Less JavaScript
+        prefix: ""
+        number: 100
+        unit: "%"
+        label: Static HTML
+      - headline: Better SEO
+        prefix: ""
+        number: 100
+        unit: "%"
+        label: Open Source
+  - type: PostsSlider
+    headline: Latest Articles
+    posts: "*"
+  - type: TextAndImage
+    headline: Built for Teams
+    content: >
+      Perfect for teams that want to build **fast and maintainable** websites.
+      The Git-based workflow makes it easy to collaborate and review changes.
+
+
+      * Git-based workflow
+
+      * Easy content editing
+
+      * TypeScript support
+
+      * Great developer experience
+    image: /img/orange-teal.jpg

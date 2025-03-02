@@ -1,0 +1,13 @@
+title: Blog
+headline: Latest Posts
+intro: Stay up to date with the latest tips, tricks, and best practices for
+  building modern websites.
+sections:
+  - type: PostsGrid
+  - type: TextAndImage
+    headline: About this Blog
+    content: >
+      This blog is a great place to share your thoughts on modern web
+      development. Whether you are a seasoned professional or just getting
+      started, we hope you find this blog useful.
+    image: /img/lemon-red.jpg

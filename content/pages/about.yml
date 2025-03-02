@@ -1,0 +1,40 @@
+title: About
+headline: About This Template
+intro: |
+  A modern starter template for building fast websites with Capri and Decap CMS.
+image: /img/orange-teal.jpg
+sections:
+  - type: TextAndImage
+    headline: Why This Template?
+    content: >
+      This template combines the best of both worlds - the simplicity of static
+      sites with the power of modern web applications. Built with Capri and
+      Decap CMS, it provides everything you need to get started quickly.
+
+
+      * Fast by default
+
+      * Easy to customize
+
+      * Great developer experience
+
+      * Perfect for teams
+    image: /img/lemon-yellow.jpg
+  - type: FactsAndFigures
+    headline: Built With Modern Tools
+    facts:
+      - headline: Capri
+        prefix: ""
+        number: 6
+        unit: ""
+        label: Vite
+      - headline: TypeScript
+        prefix: ""
+        number: 19
+        unit: ""
+        label: React
+      - headline: Tailwind
+        prefix: ""
+        number: 4
+        unit: ""
+        label: Tailwind
