@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 
-import { content } from "./src/content.js";
+import { content } from "./src/collections/index.js";
 
 export default defineConfig({
   resolve: {

@@ -46,29 +46,10 @@ function useTransform({
   ).current;
 }
 
-function useSettings(
-  props: PreviewTemplateComponentProps,
-  transform: ReturnType<typeof useTransform>
-) {
-  const { config, getCollection } = props;
-  const { collections } = config as any as CmsConfig;
-  const [settings, setSettings] = useState<any>(null);
-  const fields =
-    collections.find((c) => c.name === "settings")?.files?.[0].fields ?? [];
-  useEffect(() => {
-    getCollection("settings").then(([settings]) => {
-      transform(settings.get("data"), fields).then(setSettings);
-    });
-  }, [transform]);
-  return settings;
-}
-
-function useData(
-  props: PreviewTemplateComponentProps,
-  transform: ReturnType<typeof useTransform>
-) {
+function useData(props: PreviewTemplateComponentProps) {
   const { entry, fields } = props;
   const [data, setData] = useState<any>();
+  const transform = useTransform(props);
   useEffect(() => {
     transform(entry.getIn(["data"]), fields.toJS()).then((value) => {
       value.slug = entry.getIn(["slug"]);
@@ -107,19 +88,17 @@ function useDecapLinks(doc: Document) {
 }
 
 type PreviewProps = PreviewTemplateComponentProps & {
-  layout?: React.ComponentType<{ data: any; settings: any }>;
+  layout?: React.ComponentType<any>;
 };
 
 export function Preview(props: PreviewProps) {
   useDecapLinks(props.document);
-  const transform = useTransform(props);
-  const settings = useSettings(props, transform);
-  const data = useData(props, transform);
-  if (!data || !settings) return null;
+  const data = useData(props);
+  if (!data) return null;
   return (
     <div lang="de">
       <style>{css}</style>
-      {props.layout && <props.layout data={data} settings={settings} />}
+      {props.layout && <props.layout {...data} />}
     </div>
   );
 }

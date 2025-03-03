@@ -9,6 +9,6 @@ export const content = contentCollections({
 
 declare module "../decap-utils" {
   interface Config {
-    collections: typeof content.collections;
+    content: typeof content;
   }
 }

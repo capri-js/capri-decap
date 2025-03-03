@@ -1,7 +1,12 @@
 import type { CmsField, CmsCollection } from "decap-cms-core";
-import type { DeepMutable } from "./types";
 import { CollectionConfig, InferDoc } from "./field-inference";
 import { FunctionComponent } from "react";
+
+type DeepMutable<T> = T extends unknown
+  ? {
+      -readonly [P in keyof T]: DeepMutable<T[P]>;
+    }
+  : never;
 
 export function field<const F extends CmsField>(field: F): DeepMutable<F> {
   return field as any;
@@ -15,11 +20,13 @@ export function fields<const F extends CmsField[]>(
 
 export function collection<
   const C extends CmsCollection,
-  L extends FunctionComponent<{ data: InferDoc<C>; settings: any }>
+  L extends FunctionComponent<InferDoc<C>>
 >(collection: C, layout?: L): CollectionConfig<C> {
-  /* if (collection.files) {
-    return collection as any;
-  } */
+  if (collection.files) {
+    return {
+      config: collection as any,
+    };
+  }
   const {
     name,
     folder = `content/${name}`,

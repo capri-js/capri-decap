@@ -70,18 +70,6 @@ export type StringField =
   | CmsFieldFileOrImage
   | CmsFieldDateTime;
 
-// Utility types
-export type DeepMutable<T> = T extends unknown
-  ? {
-      -readonly [P in keyof T]: DeepMutable<T[P]>;
-    }
-  : never;
-
-export type Layout = React.ComponentType<{
-  data: any;
-  settings: any;
-}>;
-
 /* export type Route = {
   prefix: string;
   collection: string;

@@ -1,5 +1,6 @@
 import { FunctionComponent, memo } from "react";
-import { InferProps, ObjectField } from ".";
+import { InferProps } from "./field-inference";
+import { ObjectField } from "./types";
 
 type Block<F extends ObjectField> = {
   field: F;

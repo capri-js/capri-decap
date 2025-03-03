@@ -6,13 +6,11 @@ export async function render(url: string) {
   const entry = await content.resolve(url);
   if (entry) {
     const { Layout, data } = entry;
-    const settings = await content.load("settings", "settings");
-
     return prerenderToNodeStream(
       <html>
         <head></head>
         <body>
-          <Layout data={data} settings={settings} />
+          <Layout {...data} />
         </body>
       </html>
     );

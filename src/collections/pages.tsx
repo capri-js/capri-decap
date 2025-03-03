@@ -57,10 +57,14 @@ export default collection(
         widget: "list",
         types: blocks.fields,
       },
+      {
+        name: "settings",
+        widget: "hidden",
+        hint: "load(settings,settings)",
+      },
     ],
   },
-  ({ data, settings }) => {
-    const { headline, intro, sections: pageSections, description } = data;
+  ({ headline, intro, sections: pageSections, description, settings }) => {
     const { mainNav, ...footerProps } = settings;
     return (
       <>

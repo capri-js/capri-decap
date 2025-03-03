@@ -30,12 +30,14 @@ export default collection(
         widget: "hidden",
         hint: "loadAll(posts)",
       },
+      {
+        name: "settings",
+        widget: "hidden",
+        hint: "load(settings,settings)",
+      },
     ],
   },
-  ({ data, settings }) => {
-    const { title, date, image, body } = data;
-    const { mainNav, ...footerProps } = settings;
-
+  ({ title, date, image, body, settings }) => {
     return (
       <main className="min-h-screen bg-white">
         <title>{title}</title>
@@ -77,7 +79,7 @@ export default collection(
           </div>
         </article>
 
-        <Footer {...footerProps} />
+        {/* <Footer {...footerProps} /> */}
       </main>
     );
   }

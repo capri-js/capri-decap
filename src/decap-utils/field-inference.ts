@@ -17,7 +17,6 @@ import type {
   SelectField,
 } from "./types";
 import { FunctionComponent } from "react";
-import { Collections } from "./content-collections";
 
 type CollectionFields<C extends CmsCollection> = C extends {
   fields: CmsField[];
@@ -121,5 +120,19 @@ export type InferDoc<C extends CmsCollection> = InferFields<
 
 export type CollectionConfig<C extends CmsCollection> = {
   config: C;
-  layout?: FunctionComponent<{ data: InferDoc<C>; settings: any }>;
+  layout?: FunctionComponent<InferDoc<C>>;
+};
+
+export interface Config {}
+
+type CollectionValues = {
+  [K in keyof Config]: Config[K] extends {
+    collections: CollectionConfig<any>[];
+  }
+    ? Config[K]["collections"][number]["config"]
+    : never;
+}[keyof Config];
+
+export type Collections = {
+  [K in CollectionValues["name"]]: Extract<CollectionValues, { name: K }>;
 };

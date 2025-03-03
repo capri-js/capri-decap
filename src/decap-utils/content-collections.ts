@@ -4,7 +4,7 @@ import * as yaml from "js-yaml";
 import matter from "gray-matter";
 
 import {
-  DeepMutable,
+  Collection,
   FilesCollection,
   FolderCollection,
   isFilesCollection,
@@ -15,10 +15,8 @@ import { createTransform } from "./transform";
 import { getIndexFile, getPathForSlug, matchPath } from "./match";
 import { CollectionConfig } from "./field-inference";
 
-export function contentCollections<
-  const C extends CollectionConfig<any>[]
->(opts: {
-  collections: C;
+export function contentCollections(opts: {
+  collections: CollectionConfig<any>[];
   paginate?: (slug: string, page: string | number) => string;
 }) {
   const { collections, paginate = (slug, page) => `${slug}-${page}-` } = opts;
@@ -204,9 +202,7 @@ export function contentCollections<
 
   return {
     collections,
-    config: collections.map((c) => c.config) as DeepMutable<
-      C[number]["config"]
-    >[],
+    config: collections.map((c) => c.config) as Collection[],
     load: (name: string, file: string) =>
       load(name, file, { inlineDocs: true }),
     loadAll,
@@ -214,13 +210,3 @@ export function contentCollections<
     resolve,
   };
 }
-
-export interface Config {
-  collections: CollectionConfig<any>[];
-}
-
-type C = Config["collections"][number]["config"];
-
-export type Collections = {
-  [K in C["name"]]: Extract<C, { name: K }>;
-};
