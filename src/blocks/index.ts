@@ -4,13 +4,13 @@ import PostsSlider from "./PostsSlider";
 import FactsAndFigures from "./FactsAndFigures";
 import TeaserGrid from "./TeaserGrid";
 import PostsGrid from "./PostsGrid";
-import { blocks } from "../decap-utils";
+import { defineBlocks } from "../decap-utils";
 
-export default blocks(
+export default defineBlocks([
   TextAndImage,
   FeatureGrid,
   PostsSlider,
   FactsAndFigures,
   TeaserGrid,
-  PostsGrid
-);
+  PostsGrid,
+]);

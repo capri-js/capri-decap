@@ -1,6 +1,9 @@
 import { prerenderToNodeStream } from "react-dom/static";
-import { content } from "./collections";
+import { Content } from "./decap-utils";
+import { collections } from "./collections";
 import "./main.css";
+
+const content = new Content(collections);
 
 export async function render(url: string) {
   const entry = await content.resolve(url);

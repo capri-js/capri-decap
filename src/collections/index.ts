@@ -1,14 +1,12 @@
 import posts from "./posts";
 import pages from "./pages";
 import settings from "./settings";
-import { contentCollections } from "../decap-utils";
+import { defineCollections } from "../decap-utils";
 
-export const content = contentCollections({
-  collections: [posts, pages, settings],
-});
+export const collections = defineCollections([posts, pages, settings]);
 
 declare module "../decap-utils" {
   interface Config {
-    content: typeof content;
+    collections: typeof collections;
   }
 }

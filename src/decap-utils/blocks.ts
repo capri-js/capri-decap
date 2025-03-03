@@ -17,25 +17,25 @@ export function block<const F extends ObjectField>(
   };
 }
 
-type ExtractComponent<B> = B extends Block<any> ? B["component"] : never;
+type ExtractComponent<T> = T extends Block<any> ? T["component"] : never;
 
-type ExtractField<B> = B extends Block<any> ? B["field"] : never;
+type ExtractField<T> = T extends Block<any> ? T["field"] : never;
 
-type BlockName<B> = B extends Block<infer F> ? F["name"] : never;
+type BlockName<T> = T extends Block<infer F> ? F["name"] : never;
 
-export function blocks<const B extends Block<any>[]>(...b: B) {
+export function defineBlocks<const T extends Block<any>[]>(blocks: T) {
   return {
-    components: b.reduce(
+    components: blocks.reduce(
       (acc, block) => ({
         ...acc,
         [block.field.name]: block.component,
       }),
       {}
     ) as {
-      [K in B[number] as BlockName<K>]: ExtractComponent<K>;
+      [K in T[number] as BlockName<K>]: ExtractComponent<K>;
     },
-    fields: b.map((b) => b.field) as {
-      [K in keyof B]: ExtractField<B[K]>;
+    fields: blocks.map((b) => b.field) as {
+      [K in keyof T]: ExtractField<T[K]>;
     },
   };
 }

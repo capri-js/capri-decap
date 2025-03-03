@@ -4,7 +4,8 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 
-import { content } from "./src/collections/index.js";
+import { collections } from "./src/collections/index.js";
+import { listAllPaths } from "./src/decap-utils";
 
 export default defineConfig({
   resolve: {
@@ -19,7 +20,7 @@ export default defineConfig({
     capri({
       createIndexFiles: false,
       inlineCss: true,
-      prerender: () => content.listAllPaths(),
+      prerender: () => listAllPaths(collections),
       spa: "/admin",
     }),
     optimizeLodashImports(),

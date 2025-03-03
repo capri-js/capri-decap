@@ -3,7 +3,7 @@ import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { Prose } from "../components/Prose";
 import { Headline } from "../components/Headline";
-import blocks from "../blocks";
+import defineBlocks from "../blocks";
 
 export default collection(
   {
@@ -55,7 +55,7 @@ export default collection(
         label: "Sections",
         label_singular: "Section",
         widget: "list",
-        types: blocks.fields,
+        types: defineBlocks.fields,
       },
       {
         name: "settings",
@@ -79,7 +79,7 @@ export default collection(
 
         <main>
           {pageSections?.map((section, i) => {
-            const Section = blocks.components[section.type];
+            const Section = defineBlocks.components[section.type];
             return Section ? (
               <Section key={i} {...(section as any)} />
             ) : (

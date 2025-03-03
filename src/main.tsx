@@ -2,7 +2,7 @@ import { init } from "decap-cms-app/init";
 import CMS from "decap-cms-core";
 import IconWidget from "decap-cms-widget-iconify";
 
-import { content } from "./collections";
+import { collections } from "./collections";
 import { Preview } from "./Preview";
 
 init({
@@ -32,10 +32,10 @@ init({
     slug: {
       encoding: "unicode",
     },
-    collections: content.config,
+    collections: collections.config,
   },
   setup: async (cms) => {
-    for (const c of content.collections) {
+    for (const c of collections.collections) {
       cms.registerPreviewTemplate(c.config.name, (props) => (
         <Preview {...props} layout={c.layout} />
       ));
