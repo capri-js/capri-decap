@@ -4,8 +4,8 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 
-import { collections } from "./src/collections/index.js";
-import { listAllPaths } from "./src/decap-utils";
+import collections from "./src/collections/index.js";
+import { listAllPaths } from "./src/decaprio";
 
 export default defineConfig({
   resolve: {

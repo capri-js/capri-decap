@@ -1,7 +1,7 @@
-import { Settings } from "../collections/types";
+//import { Settings } from "../collections/types";
 
 type MainNavProps = {
-  mainNav: Settings["mainNav"];
+  mainNav: any; //Settings["mainNav"];
 };
 
 export function MainNav({ mainNav }: MainNavProps) {
@@ -11,7 +11,7 @@ export function MainNav({ mainNav }: MainNavProps) {
         Capri
       </a>
       <div className="flex gap-8">
-        {mainNav.map(({ href, title }) => (
+        {mainNav.map(({ href, title }: any) => (
           <a
             key={href}
             href={href}

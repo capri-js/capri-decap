@@ -4,7 +4,6 @@ import * as yaml from "js-yaml";
 import matter from "gray-matter";
 
 import {
-  Collection,
   FilesCollection,
   FolderCollection,
   isFilesCollection,
@@ -13,14 +12,11 @@ import {
 } from "./types";
 import { createTransform } from "./transform";
 import { getIndexFile, getPathForSlug, matchPath } from "./match";
-import { CollectionConfig } from "./field-inference";
+import { createElement } from "react";
+import { Decaprio } from "./decaprio";
 
 export class Content {
-  protected collections: CollectionConfig<any>[] = [];
-
-  constructor(opts: { collections: CollectionConfig<any>[] }) {
-    this.collections = opts.collections;
-  }
+  constructor(private decaprio: Decaprio) {}
 
   protected async readContent(filePath: string): Promise<any> {
     try {
@@ -46,14 +42,6 @@ export class Content {
       };
     }
     return null;
-  }
-
-  protected findCollectionConfig(name: string) {
-    const config = this.collections.find((c) => c.config.name === name);
-    if (!config) {
-      throw new Error(`Collection '${name}' not found in configuration`);
-    }
-    return config;
   }
 
   /**
@@ -106,7 +94,7 @@ export class Content {
    * Loads a single entry from a collection
    */
   async load(name: string, file: string, opts: { inlineDocs: boolean }) {
-    const c = this.findCollectionConfig(name);
+    const c = this.decaprio.getCollection(name);
     const transform = createTransform({
       load: (collectionName, slug) => {
         return this.load(collectionName, slug, { inlineDocs: false });
@@ -114,15 +102,15 @@ export class Content {
       loadAll: this.loadAll.bind(this),
       inlineDocs: opts.inlineDocs,
       getHref: (collectionName, slug) => {
-        const c = this.findCollectionConfig(collectionName);
-        return getPathForSlug(c.config, slug);
+        const c = this.decaprio.getCollection(collectionName);
+        return getPathForSlug(c, slug);
       },
     });
-    if (isFolderCollection(c.config)) {
-      const data = await this.loadFileOrIndex(c.config, file);
-      return data && transform(data, c.config.fields!);
-    } else if (isFilesCollection(c.config)) {
-      const fileConfig = c.config.files.find(
+    if (isFolderCollection(c)) {
+      const data = await this.loadFileOrIndex(c, file);
+      return data && transform(data, c.fields!);
+    } else if (isFilesCollection(c)) {
+      const fileConfig = c.files.find(
         (f) => path.basename(f.file, path.extname(f.file)) === file
       );
       if (!fileConfig) {
@@ -141,14 +129,14 @@ export class Content {
    * Loads all entries from a collection
    */
   async loadAll(name: string) {
-    const c = this.findCollectionConfig(name);
+    const c = this.decaprio.getCollection(name);
 
-    if (isFolderCollection(c.config)) {
-      return this.loadFolderCollection(c.config);
+    if (isFolderCollection(c)) {
+      return this.loadFolderCollection(c);
     }
 
-    if (isFilesCollection(c.config)) {
-      return this.loadFilesCollection(c.config);
+    if (isFilesCollection(c)) {
+      return this.loadFilesCollection(c);
     }
 
     throw new Error(
@@ -157,21 +145,15 @@ export class Content {
   }
 
   async resolve(slug: string) {
-    for (const c of this.collections) {
-      const match = matchPath(c.config, slug);
+    for (const c of this.decaprio.collections) {
+      const match = matchPath(c, slug);
       if (match !== null) {
-        const data = await this.load(c.config.name, match, {
+        const data = await this.load(c.name, match, {
           inlineDocs: true,
         });
         if (data) {
-          if (c.layout) {
-            return {
-              collection: c.config.name,
-              data,
-              Layout: c.layout,
-            };
-          }
-          throw new Error(`Collection '${c.config.name}' has no layout.`);
+          const Layout = this.decaprio.getLayout(c.name);
+          return createElement(Layout, data);
         }
       }
     }

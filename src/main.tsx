@@ -1,11 +1,10 @@
-import { init } from "decap-cms-app/init";
-import CMS from "decap-cms-core";
+import { initDecapCMS } from "./decaprio/client";
 import IconWidget from "decap-cms-widget-iconify";
 
-import { collections } from "./collections";
-import { Preview } from "./Preview";
+import { decaprio } from "./content";
 
-init({
+initDecapCMS({
+  decaprio,
   config: {
     site_url: window.location.origin,
     locale: "en",
@@ -32,16 +31,9 @@ init({
     slug: {
       encoding: "unicode",
     },
-    collections: collections.config,
   },
-  setup: async (cms) => {
-    for (const c of collections.collections) {
-      cms.registerPreviewTemplate(c.config.name, (props) => (
-        <Preview {...props} layout={c.layout} />
-      ));
-    }
-
-    cms.registerEditorComponent({
+  setup: async (CMS) => {
+    CMS.registerEditorComponent({
       // Internal id of the component
       id: "link-button",
       label: "Link Button",

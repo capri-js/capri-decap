@@ -1,6 +1,4 @@
-import { CmsCollection } from "decap-cms-core";
-import { isFolderCollection } from "./types";
-import { Collection } from "./types";
+import { CmsCollection, isFolderCollection } from "./types";
 
 function previewPathToRegex(previewPath: string) {
   return new RegExp(
@@ -22,7 +20,7 @@ function stripLeadingSlash(s: string) {
   return s.replace(/^\/(.*)/, "$1");
 }
 
-export function matchPath(collection: Collection, path: string) {
+export function matchPath(collection: CmsCollection, path: string) {
   if (isFolderCollection(collection) && collection.preview_path) {
     const re = previewPathToRegex(collection.preview_path);
     const match = re.exec(path);

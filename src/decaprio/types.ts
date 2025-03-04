@@ -14,7 +14,7 @@ import type {
   CmsFieldDateTime,
 } from "decap-cms-core";
 
-export type Collection = CmsCollection;
+export { type CmsCollection };
 
 export type FilesCollection = CmsCollection & {
   files: CmsCollectionFile[];
@@ -69,9 +69,3 @@ export type StringField =
   | CmsFieldColor
   | CmsFieldFileOrImage
   | CmsFieldDateTime;
-
-/* export type Route = {
-  prefix: string;
-  collection: string;
-  layout: Layout;
-}; */

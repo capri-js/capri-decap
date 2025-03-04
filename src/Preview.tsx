@@ -1,9 +1,8 @@
 import { PreviewTemplateComponentProps, CmsConfig } from "decap-cms-core";
 
 import css from "./main.css?inline";
-import { createTransform } from "./decap-utils";
+import { createTransform, getPathForSlug } from "./decaprio";
 import { useRef, useState, useEffect } from "react";
-import { getPathForSlug } from "./decap-utils/match";
 
 function useTransform({
   getCollection,
