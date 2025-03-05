@@ -16,19 +16,17 @@ import type {
   MultiWidgetListField,
   SelectField,
 } from "./types";
-import { CollectionOrLayout, Layout } from "./utils";
+import { CollectionRegistry } from "./utils";
 
-type ExtractCollection<T extends CollectionOrLayout> = T extends Layout<infer C>
-  ? C
-  : T;
+type CollectionByName<R extends CollectionRegistry, N extends string> = Extract<
+  R["collections"][number],
+  { name: N }
+>;
 
-type CollectionByName<
-  All extends CollectionOrLayout[],
-  N extends string
-> = Extract<ExtractCollection<All[number]>, { name: N }>;
-
-export type PreviewableCollectionNames<All extends CollectionOrLayout[]> =
-  Exclude<CollectionByName<All, "preview">, CollectionWithoutPreview>["name"];
+export type PreviewableCollectionNames<R extends CollectionRegistry> = Exclude<
+  CollectionByName<R, "preview">,
+  CollectionWithoutPreview
+>["name"];
 
 type CollectionWithoutPreview = CmsCollection & {
   editor: {
@@ -61,30 +59,30 @@ type ExtractLoad<H extends string> = H extends LoadHint
 
 export type InferFieldType<
   F extends CmsField,
-  All extends CollectionOrLayout[]
+  R extends CollectionRegistry
 > = F extends {
   widget: "hidden";
   hint?: string;
 }
   ? F["hint"] extends LoadAllHint
     ? Array<
-        InferDoc<CollectionByName<All, ExtractLoadAll<F["hint"]>>, All> & {
+        InferDoc<CollectionByName<R, ExtractLoadAll<F["hint"]>>, R> & {
           slug: string;
           href: string;
         }
       >
     : F["hint"] extends LoadHint
-    ? CollectionByName<All, ExtractLoad<F["hint"]>[0]> extends {
+    ? CollectionByName<R, ExtractLoad<F["hint"]>[0]> extends {
         files: CmsCollectionFile[];
       }
       ? InferFields<
           Extract<
-            CollectionByName<All, ExtractLoad<F["hint"]>[0]>["files"][number],
+            CollectionByName<R, ExtractLoad<F["hint"]>[0]>["files"][number],
             { name: ExtractLoad<F["hint"]>[1] }
           >["fields"],
-          All
+          R
         >
-      : InferDoc<CollectionByName<All, ExtractLoad<F["hint"]>[0]>, All>
+      : InferDoc<CollectionByName<R, ExtractLoad<F["hint"]>[0]>, R>
     : never
   : F extends StringField
   ? string
@@ -93,7 +91,7 @@ export type InferFieldType<
   : F extends CmsFieldBoolean
   ? boolean
   : F extends CmsFieldRelation
-  ? InferDoc<CollectionByName<All, F["collection"]>, All> & {
+  ? InferDoc<CollectionByName<R, F["collection"]>, R> & {
       slug: string;
       href: string;
     }
@@ -102,20 +100,20 @@ export type InferFieldType<
   : F extends MultiSelectField
   ? string[]
   : F extends VariableListField
-  ? Array<InferVariableListItem<F, All>>
+  ? Array<InferVariableListItem<F, R>>
   : F extends SingleWidgetListField
-  ? Array<InferFieldType<F["field"], All>>
+  ? Array<InferFieldType<F["field"], R>>
   : F extends MultiWidgetListField
-  ? Array<InferFields<F["fields"], All>>
+  ? Array<InferFields<F["fields"], R>>
   : F extends ObjectField
-  ? InferFields<F["fields"], All>
+  ? InferFields<F["fields"], R>
   : F extends CmsFieldMeta
   ? any
   : unknown;
 
 export type InferVariableListItem<
   F extends VariableListField,
-  C extends CmsCollection[]
+  C extends CollectionRegistry
 > = {
   [K in F["types"][number] as K["name"]]: InferFields<K["fields"], C> & {
     type: K["name"];
@@ -124,11 +122,11 @@ export type InferVariableListItem<
 
 export type InferFields<
   F extends readonly [...CmsField[]],
-  All extends CollectionOrLayout[]
+  R extends CollectionRegistry
 > = {
   [K in F[number] as K["name"]]: K extends { required: false }
-    ? InferFieldType<K, All> | undefined
-    : InferFieldType<K, All>;
+    ? InferFieldType<K, R> | undefined
+    : InferFieldType<K, R>;
 } extends infer T
   ? {
       [P in keyof T as undefined extends T[P] ? never : P]: T[P];
@@ -142,10 +140,10 @@ export type InferFields<
 
 export type InferProps<
   F extends ObjectField,
-  C extends CollectionOrLayout[]
-> = InferFields<F["fields"], C>;
+  R extends CollectionRegistry
+> = InferFields<F["fields"], R>;
 
 export type InferDoc<
   C extends CmsCollection,
-  All extends CollectionOrLayout[]
-> = InferFields<CollectionFields<C>, All> & { slug: string };
+  R extends CollectionRegistry
+> = InferFields<CollectionFields<C>, R> & { slug: string };

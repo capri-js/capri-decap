@@ -1,14 +1,14 @@
 import { prerenderToNodeStream } from "react-dom/static";
 import { DefaultDocument } from "./default-document";
-import { Decaprio } from "./decaprio";
 import { createElement } from "react";
 import { Content } from "./content";
+import { CollectionRegistry } from "./utils";
 
 export function createRenderFunction(
-  decaprio: Decaprio<any, any>,
+  registry: CollectionRegistry,
   document = DefaultDocument
 ) {
-  const content = new Content(decaprio);
+  const content = new Content(registry);
   return async (url: string) => {
     const children = await content.resolve(url);
     if (children) {

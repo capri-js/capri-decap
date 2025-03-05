@@ -1,21 +1,21 @@
-import { Decaprio } from "./decaprio";
 import { init, CmsConfig, CMS } from "decap-cms-app/init";
+import { CollectionRegistry } from "./utils";
 
 type Options = {
-  decaprio: Decaprio<any, any>;
+  registry: CollectionRegistry;
   css: string;
   config: Omit<CmsConfig, "collections">;
   setup: (cms: CMS) => void;
 };
-export function initDecapCMS({ decaprio, config, setup }: Options) {
+export function initDecapCMS({ registry, css, config, setup }: Options) {
   init({
     config: {
       ...config,
-      collections: decaprio.collections,
+      collections: registry.collections,
     },
     async setup(cms) {
       //TODO Register previews
-      for (const c of decaprio.collections) {
+      for (const c of registry.collections) {
         /* CMS.registerPreviewTemplate(c.name, (props) => (
           <Preview {...props} layout={c.layout} />
         )); */

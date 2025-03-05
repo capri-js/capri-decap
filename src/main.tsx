@@ -1,10 +1,12 @@
 import { initDecapCMS } from "./decaprio/client";
 import IconWidget from "decap-cms-widget-iconify";
 
-import { decaprio } from "./content";
+import registry from "./collections";
+import css from "./main.css?inline";
 
 initDecapCMS({
-  decaprio,
+  registry,
+  css,
   config: {
     site_url: window.location.origin,
     locale: "en",

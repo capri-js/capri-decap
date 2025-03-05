@@ -13,10 +13,10 @@ import {
 import { createTransform } from "./transform";
 import { getIndexFile, getPathForSlug, matchPath } from "./match";
 import { createElement } from "react";
-import { Decaprio } from "./decaprio";
+import { CollectionRegistry } from "./utils";
 
 export class Content {
-  constructor(private decaprio: Decaprio) {}
+  constructor(private registry: CollectionRegistry) {}
 
   protected async readContent(filePath: string): Promise<any> {
     try {
@@ -94,7 +94,7 @@ export class Content {
    * Loads a single entry from a collection
    */
   async load(name: string, file: string, opts: { inlineDocs: boolean }) {
-    const c = this.decaprio.getCollection(name);
+    const c = this.registry.getCollection(name);
     const transform = createTransform({
       load: (collectionName, slug) => {
         return this.load(collectionName, slug, { inlineDocs: false });
@@ -102,7 +102,7 @@ export class Content {
       loadAll: this.loadAll.bind(this),
       inlineDocs: opts.inlineDocs,
       getHref: (collectionName, slug) => {
-        const c = this.decaprio.getCollection(collectionName);
+        const c = this.registry.getCollection(collectionName);
         return getPathForSlug(c, slug);
       },
     });
@@ -129,7 +129,7 @@ export class Content {
    * Loads all entries from a collection
    */
   async loadAll(name: string) {
-    const c = this.decaprio.getCollection(name);
+    const c = this.registry.getCollection(name);
 
     if (isFolderCollection(c)) {
       return this.loadFolderCollection(c);
@@ -145,14 +145,14 @@ export class Content {
   }
 
   async resolve(slug: string) {
-    for (const c of this.decaprio.collections) {
+    for (const c of this.registry.collections) {
       const match = matchPath(c, slug);
       if (match !== null) {
         const data = await this.load(c.name, match, {
           inlineDocs: true,
         });
         if (data) {
-          const Layout = this.decaprio.getLayout(c.name);
+          const Layout = this.registry.getLayout(c.name);
           return createElement(Layout, data);
         }
       }
