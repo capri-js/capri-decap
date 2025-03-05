@@ -21,7 +21,11 @@ type Props = Omit<IconProps, "icon"> & { name: string };
 
 function Wrapper({ name, ...props }: Props) {
   const icon = use(getIcon(name));
-  return <Iconify width="2em" {...props} icon={icon} />;
+  return (
+    icon && (
+      <Iconify width="2em" {...props} icon={icon} ssr={import.meta.env.SSR} />
+    )
+  );
 }
 
 export function Icon(props: Props) {
