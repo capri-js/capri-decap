@@ -1,7 +1,7 @@
 import { PreviewTemplateComponentProps, CmsConfig } from "decap-cms-core";
 
-import css from "./main.css?inline";
-import { createTransform, getPathForSlug } from "./decaprio";
+import { createTransform } from "./transform";
+import { getPathForSlug } from "./match";
 import { useRef, useState, useEffect } from "react";
 
 function useTransform({
@@ -88,6 +88,7 @@ function useDecapLinks(doc: Document) {
 
 type PreviewProps = PreviewTemplateComponentProps & {
   layout?: React.ComponentType<any>;
+  css?: string;
 };
 
 export function Preview(props: PreviewProps) {
@@ -95,8 +96,8 @@ export function Preview(props: PreviewProps) {
   const data = useData(props);
   if (!data) return null;
   return (
-    <div lang="de">
-      <style>{css}</style>
+    <div>
+      <style>{props.css}</style>
       {props.layout && <props.layout {...data} />}
     </div>
   );
