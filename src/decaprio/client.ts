@@ -7,7 +7,7 @@ type Options = {
   registry: CollectionRegistry;
   css: string;
   config: Omit<CmsConfig, "collections">;
-  setup: (cms: CMS) => void;
+  setup?: (cms: CMS) => void;
 };
 export function initDecapCMS({ registry, css, config, setup }: Options) {
   init({
@@ -26,7 +26,7 @@ export function initDecapCMS({ registry, css, config, setup }: Options) {
         );
       }
 
-      await setup(cms);
+      await setup?.(cms);
     },
   });
 }
