@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import { ObjectField } from "./decap-types";
 
 export type Block<T extends ObjectField = any> = {
@@ -9,21 +10,20 @@ type BlocksProps<T> = {
   data: T[];
 };
 
-export function blocks<const B extends Block[]>(...blocks: B) {
-  return {
-    types: blocks.map((b) => b.config) as B[number]["config"][],
-    Blocks: ({ data }: any) => {
-      /* {sections?.map((section, i) => {
-        let Section: any; //TODO
-        return Section ? (
-          <Section key={i} {...(section as any)} />
-        ) : (
-          <div key={i} className="container mx-auto px-4 py-24">
-            Unknown section type: {section.type}
-          </div>
-        );
-      })} */
-      return null;
-    },
+export function createBlocksComponent<B extends Block[]>(blocks: B) {
+  const components: Record<string, any> = {};
+  blocks.forEach((block) => {
+    components[block.config.name] = block.component;
+  });
+
+  return function BlocksComponent({ data }: BlocksProps<B[number]["config"]>) {
+    return data.map(({ type, ...props }, key) => {
+      const component = components[type];
+      if (!component) {
+        console.warn(`Unknown block type: ${type}`);
+        return null;
+      }
+      return createElement(component, { key, ...props });
+    });
   };
 }
