@@ -1,6 +1,11 @@
 import immutable from "immutable";
 import type { CmsField } from "decap-cms-core";
-import { isRelationField } from "./decap-types";
+import {
+  isRelationField,
+  CmsCollection,
+  isFolderCollection,
+} from "./decap-types";
+import { getPathForSlug } from "./match";
 
 type Immutable = immutable.Iterable<unknown, unknown>;
 
@@ -27,37 +32,39 @@ function nestedFields(f?: CmsField): CmsField[] {
   return [];
 }
 
+function collectionFields(c: CmsCollection, slug: string) {
+  if (isFolderCollection(c)) {
+    return c.fields ?? [];
+  }
+  return c.files?.find((f) => f.name === slug)?.fields ?? [];
+}
+
 interface TransformOptions {
   load: (collection: string, slug: string) => Promise<unknown>;
   loadAll: (collection: string) => Promise<unknown[]>;
-  getHref: (collection: string, slug: string) => string;
+  getCollection: (collection: string) => CmsCollection;
   getAsset?: (path: string) => string;
-  inlineDocs?: boolean;
+  preview?: boolean;
 }
 
 export function createTransform({
   load,
   loadAll,
   getAsset,
-  getHref,
-  inlineDocs = true,
+  getCollection,
+  preview = false,
 }: TransformOptions) {
   const previousData = new Map();
   const cache = new Map();
 
-  const transformValue = async (
-    value: unknown,
-    field: CmsField,
-    {
-      load,
-      getAsset,
-      getHref,
-    }: Pick<TransformOptions, "load" | "getAsset" | "getHref">
-  ) => {
+  const getHref = (collectionName: string, slug: string) => {
+    const collection = getCollection(collectionName);
+    if (!collection) return slug;
+    return getPathForSlug(collection, slug, preview);
+  };
+
+  const transformValue = async (value: unknown, field: CmsField) => {
     if (isRelationField(field) && typeof value === "string") {
-      if (!inlineDocs) {
-        return value;
-      }
       const loadedValue = await load(field.collection, value);
       if (loadedValue) {
         (loadedValue as any).slug = value;
@@ -74,6 +81,14 @@ export function createTransform({
       return getAsset(value);
     }
     return value;
+  };
+
+  const loadAndTransform = async (collectionName: string, slug: string) => {
+    const value = await load(collectionName, slug);
+    const entry = isMap(value) ? value : immutable.fromJS(value);
+    const collection = getCollection(collectionName);
+    const fields = collectionFields(collection, slug);
+    return visit(entry, fields, `${collectionName}/${slug}:`);
   };
 
   const visit = async (
@@ -111,11 +126,7 @@ export function createTransform({
           }
         } else {
           const field = fields[0];
-          const transformedValue = await transformValue(item, field, {
-            load,
-            getAsset,
-            getHref,
-          });
+          const transformedValue = await transformValue(item, field);
           if (transformedValue === null) {
             newList = newList.delete(i);
             i--;
@@ -130,11 +141,7 @@ export function createTransform({
       for (const [key, val] of newMap.entrySeq().toArray()) {
         const field = fields.find((f) => f.name === key);
         if (field) {
-          const transformedValue = await transformValue(val, field, {
-            load,
-            getAsset,
-            getHref,
-          });
+          const transformedValue = await transformValue(val, field);
           if (transformedValue !== val) {
             newMap = newMap.set(key, transformedValue);
           } else {
@@ -148,34 +155,33 @@ export function createTransform({
         }
       }
 
-      if (inlineDocs) {
-        const hiddenFields = fields.filter((f) => f.widget === "hidden");
-        for (const field of hiddenFields) {
-          const fieldName = field.name;
-          const match = field.hint?.match(
-            /loadAll\(([^,]*)\)|load\((.*),(.*)\)/
-          );
-          if (match) {
-            const [, all, collection, slug] = match;
-            const loadedValue = await (slug
-              ? load(collection, slug)
-              : loadAll(all));
-            newMap = newMap.set(fieldName, loadedValue);
+      // Look for hidden fields that provide virtual data ...
+      const hiddenFields = fields.filter((f) => f.widget === "hidden");
+      for (const field of hiddenFields) {
+        const fieldName = field.name;
+        const match = field.hint?.match(/loadAll\(([^,]*)\)|load\((.*),(.*)\)/);
+        if (match) {
+          const [, all, collectionName, slug] = match;
+          if (slug) {
+            const value = await loadAndTransform(collectionName, slug);
+            newMap = newMap.set(fieldName, value);
+          } else {
+            newMap = newMap.set(fieldName, await loadAll(all));
           }
         }
+      }
 
-        const relationFields = fields.filter(isRelationField);
-        for (const field of relationFields) {
-          const fieldName = field.name;
-          const slug = value.get(fieldName);
-          if (typeof slug === "string") {
-            const loadedValue = await load(field.collection, slug);
-            if (loadedValue) {
-              (loadedValue as any).slug = slug;
-              (loadedValue as any).href = getHref(field.collection, slug);
-            }
-            newMap = newMap.set(fieldName, loadedValue);
+      const relationFields = fields.filter(isRelationField);
+      for (const field of relationFields) {
+        const fieldName = field.name;
+        const slug = value.get(fieldName);
+        if (typeof slug === "string") {
+          const loadedValue = await load(field.collection, slug);
+          if (loadedValue) {
+            (loadedValue as any).slug = slug;
+            (loadedValue as any).href = getHref(field.collection, slug);
           }
+          newMap = newMap.set(fieldName, loadedValue);
         }
       }
 

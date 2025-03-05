@@ -3,7 +3,7 @@ import { Prose } from "../components/Prose";
 import { format } from "date-fns";
 
 import { collection, layout } from "../decaprio";
-import { LayoutProps } from ".";
+import { CollectionProps } from ".";
 
 const config = collection({
   name: "posts",
@@ -39,7 +39,7 @@ const config = collection({
   ],
 });
 
-type Props = LayoutProps<typeof config>;
+type Props = CollectionProps<typeof config>;
 
 function Posts({ title, date, image, body, settings }: Props) {
   const { mainNav, ...footerProps } = settings;

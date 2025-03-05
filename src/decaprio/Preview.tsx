@@ -11,6 +11,7 @@ function useTransform({
 }: PreviewTemplateComponentProps) {
   return useRef(
     createTransform({
+      preview: true,
       load: async (type, slug) => {
         const doc = await getCollection(type, slug);
         const data = (doc as any).get("data");
@@ -34,12 +35,14 @@ function useTransform({
         }
         return `${asset.url}#path=${path}`;
       },
-      getHref: (collectionName, slug) => {
-        const collection = (config as any as CmsConfig).collections.find(
-          (c) => c.name === collectionName
+      getCollection: (name) => {
+        const c = (config as any as CmsConfig).collections.find(
+          (c) => c.name === name
         );
-        if (!collection) return slug;
-        return getPathForSlug(collection, slug, true);
+        if (!c) {
+          throw new Error(`Collection '${name}' not found`);
+        }
+        return c;
       },
     })
   ).current;

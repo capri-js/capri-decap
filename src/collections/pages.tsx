@@ -1,4 +1,4 @@
-import { LayoutProps } from "./index";
+import { CollectionProps } from "./index";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { Headline } from "../components/Headline";
@@ -66,7 +66,7 @@ const config = collection({
   ],
 });
 
-type Props = LayoutProps<typeof config>;
+type Props = CollectionProps<typeof config>;
 
 function Page({ headline, intro, sections, description, settings }: Props) {
   const { mainNav, ...footerProps } = settings;

@@ -3,7 +3,7 @@ import { CollectionOrLayout, CollectionRegistry, Layout } from "./registry";
 import { ObjectField } from "./decap-types";
 import { Block, createBlocksComponent } from "./blocks";
 
-export type { InferDoc, InferProps } from "./field-inference";
+export type { InferCollection, InferProps } from "./field-inference";
 
 type DeepMutable<T> = T extends unknown
   ? {

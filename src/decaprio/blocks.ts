@@ -6,8 +6,8 @@ export type Block<T extends ObjectField = any> = {
   component: any;
 };
 
-type BlocksProps<T> = {
-  data: T[];
+type BlocksProps<T extends ObjectField> = {
+  data: { type: T["name"] }[];
 };
 
 export function createBlocksComponent<B extends Block[]>(blocks: B) {

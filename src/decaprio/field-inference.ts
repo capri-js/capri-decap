@@ -66,7 +66,7 @@ export type InferFieldType<
 }
   ? F["hint"] extends LoadAllHint
     ? Array<
-        InferDoc<CollectionByName<R, ExtractLoadAll<F["hint"]>>, R> & {
+        InferCollection<CollectionByName<R, ExtractLoadAll<F["hint"]>>, R> & {
           slug: string;
           href: string;
         }
@@ -82,7 +82,7 @@ export type InferFieldType<
           >["fields"],
           R
         >
-      : InferDoc<CollectionByName<R, ExtractLoad<F["hint"]>[0]>, R>
+      : InferCollection<CollectionByName<R, ExtractLoad<F["hint"]>[0]>, R>
     : never
   : F extends StringField
   ? string
@@ -91,7 +91,7 @@ export type InferFieldType<
   : F extends CmsFieldBoolean
   ? boolean
   : F extends CmsFieldRelation
-  ? InferDoc<CollectionByName<R, F["collection"]>, R> & {
+  ? InferCollection<CollectionByName<R, F["collection"]>, R> & {
       slug: string;
       href: string;
     }
@@ -142,6 +142,11 @@ export type InferProps<F, R extends CollectionRegistry> = F extends ObjectField
   ? InferFields<F["fields"], R>
   : never;
 
-export type InferDoc<C, R extends CollectionRegistry> = C extends CmsCollection
+export type InferCollection<
+  C,
+  R extends CollectionRegistry
+> = C extends CmsCollection
   ? InferFields<CollectionFields<C>, R> & { slug: string }
+  : C extends string
+  ? InferFields<CollectionFields<CollectionByName<R, C>>, R> & { slug: string }
   : never;

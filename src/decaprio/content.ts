@@ -90,25 +90,13 @@ export class Content {
     return null;
   }
 
-  /**
-   * Loads a single entry from a collection
-   */
-  async load(name: string, file: string, opts: { inlineDocs: boolean }) {
+  async getContentAndFields(name: string, file: string) {
     const c = this.registry.getCollection(name);
-    const transform = createTransform({
-      load: (collectionName, slug) => {
-        return this.load(collectionName, slug, { inlineDocs: false });
-      },
-      loadAll: this.loadAll.bind(this),
-      inlineDocs: opts.inlineDocs,
-      getHref: (collectionName, slug) => {
-        const c = this.registry.getCollection(collectionName);
-        return getPathForSlug(c, slug);
-      },
-    });
     if (isFolderCollection(c)) {
-      const data = await this.loadFileOrIndex(c, file);
-      return data && transform(data, c.fields!);
+      return {
+        data: await this.loadFileOrIndex(c, file),
+        fields: c.fields!,
+      };
     } else if (isFilesCollection(c)) {
       const fileConfig = c.files.find(
         (f) => path.basename(f.file, path.extname(f.file)) === file
@@ -116,12 +104,36 @@ export class Content {
       if (!fileConfig) {
         throw new Error(`File '${file}' not found in collection '${name}'`);
       }
-      const data = await this.readContent(fileConfig.file);
-      return transform(data, fileConfig.fields);
+      return {
+        data: await this.readContent(fileConfig.file),
+        fields: fileConfig.fields,
+      };
     } else {
       throw new Error(
         `Collection '${name}' is neither a folder nor files collection`
       );
+    }
+  }
+
+  /**
+   * Loads a single entry from a collection
+   */
+  async loadAndTransform(name: string, file: string) {
+    const { data, fields } = await this.getContentAndFields(name, file);
+    if (data) {
+      const transform = createTransform({
+        load: async (name: string, file: string) => {
+          const { data } = await this.getContentAndFields(name, file);
+          return data;
+        },
+        loadAll: async (name: string) => {
+          return this.loadAll(name);
+        },
+        getCollection: (name: string) => {
+          return this.registry.getCollection(name);
+        },
+      });
+      return transform(data, fields);
     }
   }
 
@@ -148,9 +160,7 @@ export class Content {
     for (const c of this.registry.collections) {
       const match = matchPath(c, slug);
       if (match !== null) {
-        const data = await this.load(c.name, match, {
-          inlineDocs: true,
-        });
+        const data = await this.loadAndTransform(c.name, match);
         if (data) {
           const Layout = this.registry.getLayout(c.name);
           return createElement(Layout, data);
