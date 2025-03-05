@@ -4,8 +4,8 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 
-import collections from "./src/collections/index.js";
-import { listAllPaths } from "./src/decaprio";
+import { registry } from "./src/collections";
+import { listAllPaths } from "./src/decaprio/server";
 
 export default defineConfig({
   resolve: {
@@ -20,7 +20,7 @@ export default defineConfig({
     capri({
       createIndexFiles: false,
       inlineCss: true,
-      prerender: () => listAllPaths(collections),
+      prerender: () => listAllPaths(registry),
       spa: "/admin",
     }),
     optimizeLodashImports(),
