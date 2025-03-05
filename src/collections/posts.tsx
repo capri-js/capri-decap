@@ -1,10 +1,47 @@
-import { decaprio } from "../content";
 import { Footer } from "../components/Footer";
 import { Prose } from "../components/Prose";
 import { format } from "date-fns";
-import posts from "./posts";
 
-decaprio.registerLayout(posts, ({ title, date, image, body, settings }) => {
+import { collection, layout } from "../decaprio";
+import { LayoutProps } from ".";
+
+const config = collection({
+  name: "posts",
+  label: "Posts",
+  label_singular: "Post",
+  slug: "{{year}}-{{month}}-{{day}}-{{title}}",
+  preview_path: "/blog/{{slug}}",
+  extension: "md",
+  format: "frontmatter",
+  fields: [
+    { label: "Title", name: "title", widget: "string" },
+    { label: "Image", name: "image", widget: "image", required: false },
+    { label: "Date", name: "date", widget: "datetime" },
+    { label: "Body", name: "body", widget: "markdown" },
+    {
+      label: "Summary",
+      name: "summary",
+      widget: "markdown",
+      buttons: [],
+      editor_components: [],
+    },
+    {
+      // This hidden field is used to trigger the transformation and inline all posts here
+      name: "posts",
+      widget: "hidden",
+      hint: "loadAll(posts)",
+    },
+    {
+      name: "settings",
+      widget: "hidden",
+      hint: "load(settings,settings)",
+    },
+  ],
+});
+
+type Props = LayoutProps<typeof config>;
+
+function Posts({ title, date, image, body, settings }: Props) {
   const { mainNav, ...footerProps } = settings;
   return (
     <main className="min-h-screen bg-white">
@@ -50,4 +87,6 @@ decaprio.registerLayout(posts, ({ title, date, image, body, settings }) => {
       <Footer {...footerProps} />
     </main>
   );
-});
+}
+
+export default layout(config, Posts);

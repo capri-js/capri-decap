@@ -43,14 +43,46 @@ export function collection<const C extends CmsCollection>(
   } as any;
 }
 
-export function collections<const C extends CmsCollection[]>(
+export type Layout<T extends CmsCollection> = {
+  collection: T;
+  component: any;
+};
+
+export type CollectionOrLayout<T extends CmsCollection = any> = T | Layout<T>;
+
+export function layout<T extends CmsCollection>(
+  collection: T,
+  component: any
+): Layout<T> {
+  return {
+    collection,
+    component,
+  };
+}
+
+export function collections<const C extends CollectionOrLayout[]>(
   ...collections: C
 ): DeepMutable<C> {
   return collections as any;
 }
 
-export function blocks<const B extends ObjectField[]>(
-  ...blocks: B
-): DeepMutable<B> {
-  return blocks as any;
+export type Block<T extends ObjectField = any> = {
+  config: T;
+  component: any;
+};
+
+export function blocks<const B extends Block[]>(...blocks: B) {
+  return {
+    types: blocks.map((b) => b.config) as B[number]["config"][],
+  };
+}
+
+export function block<T extends ObjectField>(
+  config: T,
+  component: any
+): Block<T> {
+  return {
+    config,
+    component,
+  };
 }

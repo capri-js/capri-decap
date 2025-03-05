@@ -16,16 +16,19 @@ import type {
   MultiWidgetListField,
   SelectField,
 } from "./types";
+import { CollectionOrLayout, Layout } from "./utils";
 
-type CollectionByName<All extends CmsCollection[], N extends string> = Extract<
-  All[number],
-  { name: N }
->;
+type ExtractCollection<T extends CollectionOrLayout> = T extends Layout<infer C>
+  ? C
+  : T;
 
-export type PreviewableCollectionNames<All extends CmsCollection[]> = Exclude<
-  All[number],
-  CollectionWithoutPreview
->["name"];
+type CollectionByName<
+  All extends CollectionOrLayout[],
+  N extends string
+> = Extract<ExtractCollection<All[number]>, { name: N }>;
+
+export type PreviewableCollectionNames<All extends CollectionOrLayout[]> =
+  Exclude<CollectionByName<All, "preview">, CollectionWithoutPreview>["name"];
 
 type CollectionWithoutPreview = CmsCollection & {
   editor: {
@@ -58,7 +61,7 @@ type ExtractLoad<H extends string> = H extends LoadHint
 
 export type InferFieldType<
   F extends CmsField,
-  All extends CmsCollection[]
+  All extends CollectionOrLayout[]
 > = F extends {
   widget: "hidden";
   hint?: string;
@@ -121,11 +124,11 @@ export type InferVariableListItem<
 
 export type InferFields<
   F extends readonly [...CmsField[]],
-  C extends CmsCollection[]
+  All extends CollectionOrLayout[]
 > = {
   [K in F[number] as K["name"]]: K extends { required: false }
-    ? InferFieldType<K, C> | undefined
-    : InferFieldType<K, C>;
+    ? InferFieldType<K, All> | undefined
+    : InferFieldType<K, All>;
 } extends infer T
   ? {
       [P in keyof T as undefined extends T[P] ? never : P]: T[P];
@@ -139,10 +142,10 @@ export type InferFields<
 
 export type InferProps<
   F extends ObjectField,
-  C extends CmsCollection[]
+  C extends CollectionOrLayout[]
 > = InferFields<F["fields"], C>;
 
 export type InferDoc<
   C extends CmsCollection,
-  All extends CmsCollection[]
+  All extends CollectionOrLayout[]
 > = InferFields<CollectionFields<C>, All> & { slug: string };

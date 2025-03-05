@@ -1,15 +1,37 @@
-import { decaprio } from "../../content";
-import { Section } from "../../components/Section";
-import { Container } from "../../components/Container";
-import { Grid } from "../../components/Grid";
-import { Card } from "../../components/Card";
-import { Headline } from "../../components/Headline";
-import { Pagination } from "../../components/Pagination";
-import PostsGrid from ".";
+import { Section } from "../components/Section";
+import { Container } from "../components/Container";
+import { Grid } from "../components/Grid";
+import { Card } from "../components/Card";
+import { Headline } from "../components/Headline";
+import { Pagination } from "../components/Pagination";
+
+import { block, field } from "../decaprio";
+import { BlockProps } from "../collections";
+
+const config = field({
+  label: "Posts Grid",
+  name: "PostsGrid",
+  widget: "object",
+  fields: [
+    {
+      label: "Headline",
+      name: "headline",
+      widget: "string",
+      required: false,
+    },
+    {
+      name: "posts",
+      widget: "hidden",
+      hint: "loadAll(posts)",
+    },
+  ],
+});
 
 const POSTS_PER_PAGE = 9;
 
-decaprio.registerBlock(PostsGrid, ({ headline, posts /* page = 1 */ }) => {
+type Props = BlockProps<typeof config>;
+
+function PostsGrid({ headline, posts /* page = 1 */ }: Props) {
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
   const page = 1;
   const start = (page - 1) * POSTS_PER_PAGE;
@@ -41,4 +63,6 @@ decaprio.registerBlock(PostsGrid, ({ headline, posts /* page = 1 */ }) => {
       </Container>
     </Section>
   );
-});
+}
+
+export default block(config, PostsGrid);

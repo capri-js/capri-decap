@@ -1,16 +1,16 @@
-import TextAndImage from "./TextAndImage";
-import FeatureGrid from "./FeatureGrid";
-import PostsSlider from "./PostsSlider";
 import FactsAndFigures from "./FactsAndFigures";
-import TeaserGrid from "./TeaserGrid";
+import FeatureGrid from "./FeatureGrid";
 import PostsGrid from "./PostsGrid";
+import PostsSlider from "./PostsSlider";
+import TeaserGrid from "./TeaserGrid";
+import TextAndImage from "./TextAndImage";
 import { blocks } from "../decaprio";
 
-export default blocks(
-  TextAndImage,
-  FeatureGrid,
-  PostsSlider,
+export const { types } = blocks(
   FactsAndFigures,
+  FeatureGrid,
+  PostsGrid,
+  PostsSlider,
   TeaserGrid,
-  PostsGrid
+  TextAndImage
 );

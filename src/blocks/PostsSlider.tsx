@@ -1,14 +1,32 @@
-import { decaprio } from "../../content";
 import { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { OptimizedImage } from "../../components/OptimizedImage";
-import { Section } from "../../components/Section";
-import { Container } from "../../components/Container";
-import { Headline } from "../../components/Headline";
-import { Icon } from "../../components/Icon";
-import PostsSlider from "./index";
+import { OptimizedImage } from "../components/OptimizedImage";
+import { Section } from "../components/Section";
+import { Container } from "../components/Container";
+import { Headline } from "../components/Headline";
+import { Icon } from "../components/Icon";
 
-decaprio.registerBlock(PostsSlider, ({ headline, posts }) => {
+import { block, field } from "../decaprio";
+import { BlockProps } from "../collections";
+
+const config = field({
+  label: "Posts Slider",
+  name: "PostsSlider",
+  widget: "object",
+  fields: [
+    { label: "Headline", name: "headline", widget: "string" },
+    {
+      // This hidden field is used to trigger the transformation and inline all projects here
+      name: "posts",
+      widget: "hidden",
+      hint: "loadAll(posts)",
+    },
+  ],
+});
+
+type Props = BlockProps<typeof config>;
+
+function PostsSlider({ headline, posts }: Props) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     containScroll: "trimSnaps",
@@ -80,4 +98,6 @@ decaprio.registerBlock(PostsSlider, ({ headline, posts }) => {
       </Container>
     </Section>
   );
-});
+}
+
+export default block(config, PostsSlider);
