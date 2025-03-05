@@ -5,7 +5,7 @@ import { Headline } from "../components/Headline";
 import { Prose } from "../components/Prose";
 
 import { collection, layout } from "../decaprio";
-import { types } from "../blocks";
+import { types, Blocks } from "../blocks";
 
 const config = collection({
   name: "pages",
@@ -82,16 +82,7 @@ function Page({ headline, intro, sections, description, settings }: Props) {
       </Header>
 
       <main>
-        {sections?.map((section, i) => {
-          let Section: any; //TODO
-          return Section ? (
-            <Section key={i} {...(section as any)} />
-          ) : (
-            <div key={i} className="container mx-auto px-4 py-24">
-              Unknown section type: {section.type}
-            </div>
-          );
-        })}
+        <Blocks data={sections} />
       </main>
 
       <Footer {...footerProps} />

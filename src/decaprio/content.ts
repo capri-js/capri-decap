@@ -9,11 +9,11 @@ import {
   isFilesCollection,
   isFolderCollection,
   isNested,
-} from "./types";
+} from "./decap-types";
 import { createTransform } from "./transform";
 import { getIndexFile, getPathForSlug, matchPath } from "./match";
 import { createElement } from "react";
-import { CollectionRegistry } from "./utils";
+import { CollectionRegistry } from "./registry";
 
 export class Content {
   constructor(private registry: CollectionRegistry) {}

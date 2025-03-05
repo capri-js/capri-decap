@@ -1,5 +1,5 @@
 import { init, CmsConfig, CMS } from "decap-cms-app/init";
-import { CollectionRegistry } from "./utils";
+import { CollectionRegistry } from "./registry";
 
 type Options = {
   registry: CollectionRegistry;

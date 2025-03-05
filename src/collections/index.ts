@@ -1,17 +1,9 @@
 import posts from "./posts";
 import pages from "./pages";
 import settings from "./settings";
-import {
-  CmsCollection,
-  collections,
-  InferDoc,
-  InferProps,
-  ObjectField,
-} from "../decaprio";
+import { collections, InferDoc, InferProps } from "../decaprio";
 
-const c = collections(posts, pages, settings);
+export const registry = collections(posts, pages, settings);
 
-export type LayoutProps<T extends CmsCollection> = InferDoc<T, typeof c>;
-export type BlockProps<T extends ObjectField> = InferProps<T, typeof c>;
-
-export default c;
+export type LayoutProps<T> = InferDoc<T, typeof registry>;
+export type BlockProps<T> = InferProps<T, typeof registry>;

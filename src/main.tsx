@@ -1,7 +1,7 @@
 import { initDecapCMS } from "./decaprio/client";
 import IconWidget from "decap-cms-widget-iconify";
 
-import registry from "./collections";
+import { registry } from "./collections";
 import css from "./main.css?inline";
 
 initDecapCMS({

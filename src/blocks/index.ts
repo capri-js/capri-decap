@@ -6,7 +6,7 @@ import TeaserGrid from "./TeaserGrid";
 import TextAndImage from "./TextAndImage";
 import { blocks } from "../decaprio";
 
-export const { types } = blocks(
+export const { types, Blocks } = blocks(
   FactsAndFigures,
   FeatureGrid,
   PostsGrid,

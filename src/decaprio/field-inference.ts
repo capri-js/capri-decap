@@ -15,8 +15,8 @@ import type {
   SingleWidgetListField,
   MultiWidgetListField,
   SelectField,
-} from "./types";
-import { CollectionRegistry } from "./utils";
+} from "./decap-types";
+import { CollectionRegistry } from "./registry";
 
 type CollectionByName<R extends CollectionRegistry, N extends string> = Extract<
   R["collections"][number],
@@ -138,12 +138,10 @@ export type InferFields<
     }
   : never;
 
-export type InferProps<
-  F extends ObjectField,
-  R extends CollectionRegistry
-> = InferFields<F["fields"], R>;
+export type InferProps<F, R extends CollectionRegistry> = F extends ObjectField
+  ? InferFields<F["fields"], R>
+  : never;
 
-export type InferDoc<
-  C extends CmsCollection,
-  R extends CollectionRegistry
-> = InferFields<CollectionFields<C>, R> & { slug: string };
+export type InferDoc<C, R extends CollectionRegistry> = C extends CmsCollection
+  ? InferFields<CollectionFields<C>, R> & { slug: string }
+  : never;

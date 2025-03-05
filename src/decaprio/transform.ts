@@ -1,6 +1,6 @@
-import type { CmsField } from "decap-cms-core";
 import immutable from "immutable";
-import { isRelationField } from "./types";
+import type { CmsField } from "decap-cms-core";
+import { isRelationField } from "./decap-types";
 
 type Immutable = immutable.Iterable<unknown, unknown>;
 
