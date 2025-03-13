@@ -1,10 +1,10 @@
 import { memo } from "react";
 import { styled } from "classname-variants/react";
+import { Image } from "@capri-js/image";
 
-import { PostsSliderProps } from "../fields";
 import { IconButton } from "./Button";
 import Carousel from "./Carousel.island";
-import { OptimizedImage } from "./OptimizedImage";
+import { PostsSliderProps } from "../blocks/PostsSlider";
 
 export const PostsSlider = memo(function PostsSlider({
   posts,
@@ -18,7 +18,7 @@ export const PostsSlider = memo(function PostsSlider({
               <div className="flex flex-col gap-sm hyphens-auto">
                 <h3 className="text-heading-sm">{title}</h3>
                 {image && (
-                  <OptimizedImage
+                  <Image
                     src={image}
                     sizes="300px"
                     alt=""

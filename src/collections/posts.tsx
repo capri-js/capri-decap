@@ -1,8 +1,8 @@
+import { collection, layout } from "decaprio";
+
 import { Footer } from "../components/Footer";
 import { Prose } from "../components/Prose";
-import { format } from "date-fns";
 
-import { collection, layout } from "../decaprio";
 import { CollectionProps } from ".";
 
 const config = collection({
@@ -67,7 +67,7 @@ function Posts({ title, date, image, body, settings }: Props) {
             <div className="backdrop-blur-lg bg-white/70 p-8 rounded-lg shadow-lg">
               {date && (
                 <time className="text-sm font-medium text-gray-600 mb-2 block">
-                  {format(new Date(date), "MMMM d, yyyy")}
+                  {new Date(date).toLocaleDateString()}
                 </time>
               )}
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900">

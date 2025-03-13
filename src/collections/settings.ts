@@ -1,4 +1,4 @@
-import { collection } from "../decaprio";
+import { collection } from "decaprio";
 
 export default collection({
   name: "settings",

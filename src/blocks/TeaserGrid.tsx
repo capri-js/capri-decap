@@ -1,11 +1,11 @@
+import { block, field } from "decaprio";
+
 import { Grid } from "../components/Grid";
 import { Section } from "../components/Section";
 import { Container } from "../components/Container";
 import { Card } from "../components/Card";
 import { Headline } from "../components/Headline";
 import { BlockProps } from "../collections";
-
-import { block, field } from "../decaprio";
 
 const config = field({
   label: "Teaser-Grid",

@@ -1,10 +1,11 @@
-import { OptimizedImage } from "../components/OptimizedImage";
+import { block, field } from "decaprio";
+import { Image } from "@capri-js/image";
+
 import { Prose } from "../components/Prose";
 import { Section } from "../components/Section";
 import { Container } from "../components/Container";
 
 import { BlockProps } from "../collections";
-import { block, field } from "../decaprio";
 
 const config = field({
   label: "Text & Image",
@@ -45,7 +46,7 @@ export function TextAndImage({ headline, content, image }: Props) {
           </div>
           {image && (
             <div className="order-first md:order-last">
-              <OptimizedImage
+              <Image
                 src={image}
                 alt=""
                 className="rounded-lg shadow-lg"

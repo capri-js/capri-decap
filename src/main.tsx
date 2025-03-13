@@ -1,10 +1,10 @@
-import { initDecapCMS } from "./decaprio/client";
+import { init } from "decaprio/decap";
 import IconWidget from "decap-cms-widget-iconify";
 
 import { registry } from "./collections";
 import css from "./main.css?inline";
 
-initDecapCMS({
+init({
   registry,
   css,
   config: {

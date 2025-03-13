@@ -1,8 +1,9 @@
+import { block, field } from "decaprio";
+
 import { Section } from "../components/Section";
 import { Container } from "../components/Container";
 import { Headline } from "../components/Headline";
 
-import { block, field } from "../decaprio";
 import { BlockProps } from "../collections";
 
 const config = field({

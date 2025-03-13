@@ -1,5 +1,5 @@
 import { Icon } from "../components/Icon";
-import { OptimizedImage } from "./OptimizedImage";
+import { Image } from "@capri-js/image";
 import { styled } from "classname-variants/react";
 
 type CardProps = {
@@ -23,7 +23,7 @@ export function Card({
   return (
     <CardWrapper {...wrapperProps}>
       <div className="md:max-lg:group-last:group-odd:row-span-3">
-        <OptimizedImage src={image} alt="" />
+        <Image src={image} alt="" />
       </div>
       <div className="p-4 md:max-lg:group-last:group-odd:row-span-2">
         <h3 className="text-lg">{headline}</h3>

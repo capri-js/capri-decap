@@ -1,12 +1,13 @@
 import { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { OptimizedImage } from "../components/OptimizedImage";
+import { block, field } from "decaprio";
+import { Image } from "@capri-js/image";
+
 import { Section } from "../components/Section";
 import { Container } from "../components/Container";
 import { Headline } from "../components/Headline";
 import { Icon } from "../components/Icon";
 
-import { block, field } from "../decaprio";
 import { BlockProps } from "../collections";
 
 const config = field({
@@ -24,9 +25,9 @@ const config = field({
   ],
 });
 
-type Props = BlockProps<typeof config>;
+export type PostsSliderProps = BlockProps<typeof config>;
 
-function PostsSlider({ headline, posts }: Props) {
+function PostsSlider({ headline, posts }: PostsSliderProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     containScroll: "trimSnaps",
@@ -55,7 +56,7 @@ function PostsSlider({ headline, posts }: Props) {
                   <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow h-full">
                     {image && (
                       <div className="aspect-w-16 aspect-h-9 rounded-t-lg overflow-hidden">
-                        <OptimizedImage
+                        <Image
                           src={image}
                           alt=""
                           className="object-cover"

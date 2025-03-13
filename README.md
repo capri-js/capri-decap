@@ -1,8 +1,8 @@
 ## TODO
 
 - [ ] Support pagination
-- [ ] extract decaprio
+- [ ] move editor components to decaprio
 - [ ] Get visual editing working
 - [ ] Fix image build cache / add tests
 - [ ] Decap PR to include slug in getCollection() results?
-- [ ] Fix React dependency issues
+- [ ] Fix Decap React dependency issues

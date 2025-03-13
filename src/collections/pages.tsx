@@ -1,10 +1,11 @@
+import { collection, layout } from "decaprio";
+
 import { CollectionProps } from "./index";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { Headline } from "../components/Headline";
 import { Prose } from "../components/Prose";
 
-import { collection, layout } from "../decaprio";
 import { types, Blocks } from "../blocks";
 
 const config = collection({

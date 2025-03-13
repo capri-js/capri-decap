@@ -1,3 +1,5 @@
+import { block, field } from "decaprio";
+
 import { Section } from "../components/Section";
 import { Container } from "../components/Container";
 import { Grid } from "../components/Grid";
@@ -5,7 +7,6 @@ import { Card } from "../components/Card";
 import { Headline } from "../components/Headline";
 import { Pagination } from "../components/Pagination";
 
-import { block, field } from "../decaprio";
 import { BlockProps } from "../collections";
 
 const config = field({
@@ -37,7 +38,6 @@ function PostsGrid({ headline, posts /* page = 1 */ }: Props) {
   const start = (page - 1) * POSTS_PER_PAGE;
   const end = start + POSTS_PER_PAGE;
   const visiblePosts = posts.slice(start, end);
-  console.log(posts);
   return (
     <Section color="gray">
       <Container>
