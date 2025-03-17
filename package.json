@@ -32,10 +32,5 @@
     "typescript": "^5.7.2",
     "vite": "^6.2.0",
     "vite-bundle-analyzer": "^0.17.1"
-  },
-  "overrides": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "slate": "^0.112.0"
   }
 }
