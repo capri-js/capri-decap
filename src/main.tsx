@@ -2,11 +2,13 @@ import { init } from "decaprio/decap";
 import IconWidget from "decap-cms-widget-iconify";
 
 import { registry } from "./collections";
+import { editorComponents } from "./markdown";
 import css from "./main.css?inline";
 
 init({
-  registry,
   css,
+  registry,
+  editorComponents,
   config: {
     site_url: window.location.origin,
     locale: "en",
@@ -15,8 +17,8 @@ init({
     backend: {
       name: "github",
       branch: "main",
-      repo: "Lionizers/lionizers-website-capri",
-      base_url: "https://lionizers.com",
+      repo: "your-org/repo",
+      base_url: "https://example.com",
       auth_endpoint: "/api/auth",
       commit_messages: {
         create: "content: create {{slug}}",
@@ -35,38 +37,6 @@ init({
     },
   },
   setup: async (CMS) => {
-    CMS.registerEditorComponent({
-      // Internal id of the component
-      id: "link-button",
-      label: "Link Button",
-      fields: [
-        {
-          name: "label",
-          label: "Label",
-          widget: "string",
-        },
-        {
-          name: "link",
-          label: "Link",
-          widget: "string",
-        },
-      ],
-      // Regex pattern used to search for instances of this block in the markdown document.
-      pattern: /^<LinkButton link="(.*?)" label="(.*?)" \/>$/ms,
-      fromBlock: function (match) {
-        return {
-          link: match[1],
-          label: match[2],
-        };
-      },
-      toBlock: function (data) {
-        return `<LinkButton link="${data.link}" label="${data.label}" />`;
-      },
-      toPreview: function (data) {
-        return <div>LINK:{data.label}</div>;
-      },
-    });
-
     CMS.registerWidget(
       IconWidget.Widget({
         collection: "material-symbols-light",

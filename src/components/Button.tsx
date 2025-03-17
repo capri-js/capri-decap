@@ -43,11 +43,3 @@ export function IconButton({
     </Button>
   );
 }
-
-export function LinkButton({ link, label }: { link: string; label: string }) {
-  return (
-    <IconButton as="a" href={link}>
-      {label}
-    </IconButton>
-  );
-}

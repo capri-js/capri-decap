@@ -1,23 +1,13 @@
-import Markdown from "markdown-to-jsx";
-import { LinkButton } from "./Button";
+import { ComponentPropsWithoutRef } from "react";
 import { styled } from "classname-variants/react";
-import { ComponentPropsWithoutRef, Fragment } from "react";
-
-const options = {
-  wrapper: Fragment,
-  overrides: {
-    LinkButton: {
-      component: LinkButton,
-    },
-  },
-};
+import { Markdown } from "../markdown";
 
 type Props = ComponentPropsWithoutRef<typeof Wrapper>;
 export function Prose({ children, ...props }: Props) {
   if (!children) return null;
   return (
     <Wrapper {...props}>
-      <Markdown options={options}>{children.replaceAll("\\\n", "\n")}</Markdown>
+      <Markdown content={children} />
     </Wrapper>
   );
 }

@@ -10,13 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capri-js/image": "^0.0.6",
+    "@capri-js/image": "^0.0.7",
     "@iconify/react": "^5.2.0",
     "classname-variants": "^1.5.0",
     "decap-cms-widget-iconify": "^1.0.2",
     "decaprio": "^0.1.5",
     "embla-carousel-react": "^8.5.2",
-    "markdown-to-jsx": "^7.7.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -24,10 +23,10 @@
     "@rollup/rollup-linux-x64-gnu": "^4.34.6"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.0.8",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
-    "@tailwindcss/typography": "^0.5.16",
     "decap-server": "^3.2.0",
     "tailwindcss": "^4.0.8",
     "typescript": "^5.7.2",
